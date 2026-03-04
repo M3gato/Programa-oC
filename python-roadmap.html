@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #f7c948;
+    --accent2: #4af7a8;
+    --accent3: #f74a6a;
+    --text: #e8e8f0;
+    --muted: #6b6b88;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(247,201,72,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(247,201,72,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    margin-bottom: 64px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+
+  h1 span {
+    color: var(--accent);
+    display: block;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: 'Space Mono', monospace;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .phase {
+    position: relative;
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .phase:nth-child(1) { animation-delay: 0.1s; }
+  .phase:nth-child(2) { animation-delay: 0.2s; }
+  .phase:nth-child(3) { animation-delay: 0.3s; }
+  .phase:nth-child(4) { animation-delay: 0.4s; }
+  .phase:nth-child(5) { animation-delay: 0.5s; }
+  .phase:nth-child(6) { animation-delay: 0.6s; }
+
+  .phase-dot {
+    position: absolute;
+    left: -34px;
+    top: 14px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    transition: transform 0.2s;
+  }
+
+  .phase:nth-child(2) .phase-dot { border-color: #a0f74a; }
+  .phase:nth-child(3) .phase-dot { border-color: var(--accent2); }
+  .phase:nth-child(4) .phase-dot { border-color: #4acdf7; }
+  .phase:nth-child(5) .phase-dot { border-color: #b44af7; }
+  .phase:nth-child(6) .phase-dot { border-color: var(--accent3); }
+
+  .phase:hover .phase-dot {
+    transform: scale(1.4);
+  }
+
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+
+  .phase:hover .phase-card {
+    border-color: rgba(247,201,72,0.3);
+    transform: translateX(4px);
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .phase-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+
+  .phase-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    flex: 1;
+  }
+
+  .phase-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .badge-iniciante { background: rgba(247,201,72,0.12); color: var(--accent); border: 1px solid rgba(247,201,72,0.3); }
+  .badge-basico { background: rgba(160,247,74,0.12); color: #a0f74a; border: 1px solid rgba(160,247,74,0.3); }
+  .badge-intermediario { background: rgba(74,247,168,0.12); color: var(--accent2); border: 1px solid rgba(74,247,168,0.3); }
+  .badge-avancado { background: rgba(74,205,247,0.12); color: #4acdf7; border: 1px solid rgba(74,205,247,0.3); }
+  .badge-especialista { background: rgba(180,74,247,0.12); color: #b44af7; border: 1px solid rgba(180,74,247,0.3); }
+  .badge-profissional { background: rgba(247,74,106,0.12); color: var(--accent3); border: 1px solid rgba(247,74,106,0.3); }
+
+  .topics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .topic {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #b0b0c8;
+    font-family: 'Space Mono', monospace;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .topic::before {
+    content: '›';
+    color: var(--accent);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .phase:nth-child(2) .topic::before { color: #a0f74a; }
+  .phase:nth-child(3) .topic::before { color: var(--accent2); }
+  .phase:nth-child(4) .topic::before { color: #4acdf7; }
+  .phase:nth-child(5) .topic::before { color: #b44af7; }
+  .phase:nth-child(6) .topic::before { color: var(--accent3); }
+
+  .phase-tip {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    line-height: 1.6;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .phase-tip strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .duration-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .duration-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--accent);
+    animation: barGrow 1s ease both;
+  }
+
+  .phase:nth-child(2) .bar-fill { background: #a0f74a; }
+  .phase:nth-child(3) .bar-fill { background: var(--accent2); }
+  .phase:nth-child(4) .bar-fill { background: #4acdf7; }
+  .phase:nth-child(5) .bar-fill { background: #b44af7; }
+  .phase:nth-child(6) .bar-fill { background: var(--accent3); }
+
+  .duration-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 16px;
+    animation: fadeUp 0.6s 0.7s ease both;
+  }
+
+  .footer-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    max-width: 400px;
+    line-height: 1.7;
+  }
+
+  .total-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-align: right;
+  }
+
+  .total-time strong {
+    display: block;
+    font-size: 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes barGrow {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="tag">// roadmap</div>
+    <h1>Aprenda<span>Python</span></h1>
+    <p class="subtitle">Do zero ao profissional — um caminho estruturado, passo a passo, sem pular etapas.</p>
+  </header>
+
+  <div class="timeline">
+
+    <!-- Fase 1 -->
+    <div class="phase">
+      <div class="phase-dot"></div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-num">FASE 01</span>
+          <span class="phase-title">Fundamentos da Linguagem</span>
+          <span class="phase-badge badge-iniciante">Iniciante</span>
+        </div>
+        <div class="duration-bar">
+          <span class="duration-label">DURAÇÃO</span>
+          <div class="bar-track"><div class="bar-fill" style="width:15%"></div></div>
+          <span class="duration-val">2–4 semanas</span>
+        </div>
+        <div class="topics">
+          <div class="topic">Instalação & ambiente</div>
+          <div class="topic">Variáveis & tipos</div>
+          <div class="topic">Strings & formatação</div>
+          <div class="topic">input() e print()</div>
+          <div class="topic">Operadores</div>
+          <div class="topic">Condicionais (if/else)</div>
+          <div class="topic">Loops (for, while)</div>
+          <div class="topic">Comentários & boas práticas</div>
+        </div>
+        <p class="phase-tip"><strong>Ferramentas:</strong> Python.org, VS Code, Thonny (amigável para iniciantes)<br><strong>Prática:</strong> Calculadora simples, tabuada, adivinhe o número</p>
+      </div>
+    </div>
+
+    <!-- Fase 2 -->
+    <div class="phase">
+      <div class="phase-dot"></div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-num">FASE 02</span>
+          <span class="phase-title">Estruturas de Dados</span>
+          <span class="phase-badge badge-basico">Básico</span>
+        </div>
+        <div class="duration-bar">
+          <span class="duration-label">DURAÇÃO</span>
+          <div class="bar-track"><div class="bar-fill" style="width:28%"></div></div>
+          <span class="duration-val">3–5 semanas</span>
+        </div>
+        <div class="topics">
+          <div class="topic">Listas</div>
+          <div class="topic">Tuplas</div>
+          <div class="topic">Dicionários</div>
+          <div class="topic">Sets</div>
+          <div class="topic">List comprehensions</div>
+          <div class="topic">Slicing</div>
+          <div class="topic">Funções embutidas</div>
+          <div class="topic">Iteração avançada</div>
+        </div>
+        <p class="phase-tip"><strong>Prática:</strong> Agenda de contatos, jogo de cartas, analisador de texto simples</p>
+      </div>
+    </div>
+
+    <!-- Fase 3 -->
+    <div class="phase">
+      <div class="phase-dot"></div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-num">FASE 03</span>
+          <span class="phase-title">Funções & Módulos</span>
+          <span class="phase-badge badge-intermediario">Intermediário</span>
+        </div>
+        <div class="duration-bar">
+          <span class="duration-label">DURAÇÃO</span>
+          <div class="bar-track"><div class="bar-fill" style="width:45%"></div></div>
+          <span class="duration-val">4–6 semanas</span>
+        </div>
+        <div class="topics">
+          <div class="topic">Funções & parâmetros</div>
+          <div class="topic">*args e **kwargs</div>
+          <div class="topic">Funções lambda</div>
+          <div class="topic">Decoradores</div>
+          <div class="topic">Módulos & pacotes</div>
+          <div class="topic">pip & bibliotecas</div>
+          <div class="topic">Arquivos (read/write)</div>
+          <div class="topic">Tratamento de erros</div>
+        </div>
+        <p class="phase-tip"><strong>Prática:</strong> Gerador de senhas, leitor de CSV, organizador de arquivos</p>
+      </div>
+    </div>
+
+    <!-- Fase 4 -->
+    <div class="phase">
+      <div class="phase-dot"></div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-num">FASE 04</span>
+          <span class="phase-title">Orientação a Objetos</span>
+          <span class="phase-badge badge-avancado">Avançado</span>
+        </div>
+        <div class="duration-bar">
+          <span class="duration-label">DURAÇÃO</span>
+          <div class="bar-track"><div class="bar-fill" style="width:62%"></div></div>
+          <span class="duration-val">4–6 semanas</span>
+        </div>
+        <div class="topics">
+          <div class="topic">Classes & objetos</div>
+          <div class="topic">__init__ e métodos</div>
+          <div class="topic">Herança</div>
+          <div class="topic">Polimorfismo</div>
+          <div class="topic">Encapsulamento</div>
+          <div class="topic">Métodos estáticos</div>
+          <div class="topic">Dunder methods</div>
+          <div class="topic">Dataclasses</div>
+        </div>
+        <p class="phase-tip"><strong>Prática:</strong> Sistema bancário, RPG simples, gerenciador de biblioteca</p>
+      </div>
+    </div>
+
+    <!-- Fase 5 -->
+    <div class="phase">
+      <div class="phase-dot"></div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-num">FASE 05</span>
+          <span class="phase-title">Escolha sua Trilha</span>
+          <span class="phase-badge badge-especialista">Especialista</span>
+        </div>
+        <div class="duration-bar">
+          <span class="duration-label">DURAÇÃO</span>
+          <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+          <span class="duration-val">2–4 meses</span>
+        </div>
+        <div class="topics">
+          <div class="topic">🌐 Web (Django/Flask)</div>
+          <div class="topic">🤖 Data Science (Pandas)</div>
+          <div class="topic">🧠 Machine Learning</div>
+          <div class="topic">⚙️ Automação (Selenium)</div>
+          <div class="topic">🔌 APIs REST</div>
+          <div class="topic">🗄️ Banco de dados</div>
+          <div class="topic">🖥️ DevOps & Scripts</div>
+          <div class="topic">🎮 Games (Pygame)</div>
+        </div>
+        <p class="phase-tip"><strong>Dica:</strong> Escolha <strong>uma trilha</strong> e aprofunde-se. Não tente aprender tudo ao mesmo tempo.</p>
+      </div>
+    </div>
+
+    <!-- Fase 6 -->
+    <div class="phase">
+      <div class="phase-dot"></div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <span class="phase-num">FASE 06</span>
+          <span class="phase-title">Projetos Reais & Portfólio</span>
+          <span class="phase-badge badge-profissional">Profissional</span>
+        </div>
+        <div class="duration-bar">
+          <span class="duration-label">DURAÇÃO</span>
+          <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+          <span class="duration-val">Contínuo</span>
+        </div>
+        <div class="topics">
+          <div class="topic">Git & GitHub</div>
+          <div class="topic">Testes (pytest)</div>
+          <div class="topic">Clean code</div>
+          <div class="topic">Code review</div>
+          <div class="topic">Deploy de projetos</div>
+          <div class="topic">Open source</div>
+          <div class="topic">Documentação</div>
+          <div class="topic">Contribuição em equipe</div>
+        </div>
+        <p class="phase-tip"><strong>Meta:</strong> 3–5 projetos no GitHub que demonstrem suas habilidades. Qualidade > quantidade.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p class="footer-note">
+      Consistência bate intensidade. <strong>30 minutos por dia</strong> são mais efetivos do que uma maratona de fim de semana. Programe todo dia.
+    </p>
+    <div class="total-time">
+      tempo estimado<strong>6–12 meses</strong>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
